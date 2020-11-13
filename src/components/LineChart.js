@@ -20,7 +20,7 @@ export default {
 	},
 	
 	mounted(){
-		 // 從傳入的資料中取出數字與日期，並將其反轉(因為我們拿到的是最新到最舊的資料)
+		//從傳入的資料中取出數字與日期，並將其反轉(因為我們拿到的是最新到最舊的資料)
 		const dates = this.chartData.map(d => d.date).reverse()
 		
 		const totals = this.chartData.map(d => d.total).reverse()

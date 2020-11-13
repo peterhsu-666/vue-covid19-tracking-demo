@@ -23,3 +23,4 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 "# vue-covid19-tracking-demo" 
+"# vue-covid19-tracking-demo" 

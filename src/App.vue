@@ -1,42 +1,39 @@
-<template>
+ <template>
   <v-app>
     <v-main>
-		<v-container>
-			<v-card>
-				<v-container>
-				    <h1>COVID-19 Tracking Dashboard</h1>
-					<v-tabs v-model="tab" background-color="primary" dark>
-						<v-tab 
-							v-for="item in labels" 
-							:key="item" 
-							:href="`#${item}`">
-						{{ item }}
-						</v-tab>
-					</v-tabs>
-					<v-tabs-items v-model="tab">
-						<v-tab-item
-							v-for="chartData in renderData"
-							:key="chartData.id"
-							:value="chartData.label"
-						>
-							<v-card flat>
-								<v-row v-if="arrPositive.length">
-									<v-col cols="12">
-										<h2>{{ chartData.label }}</h2>
-										<LineChart 
-											:label="chartData.label"
-											:chartData="chartData.data"
-											:options="chartOptions"
-											:chartColorOptions="chartData.chartColorOptions"
-										/>
-									</v-col>
-								</v-row>
-							</v-card>
-						</v-tab-item>
-					</v-tabs-items>
-				</v-container>
-			</v-card>
-		</v-container>
+      <v-container>
+        <v-card>
+          <v-container>
+            <h1>COVID-19 Tracking Dashboard</h1>
+            <v-tabs v-model="tab" background-color="primary" dark>
+              <v-tab v-for="item in labels" :key="item" :href="`#${item}`">
+                {{ item }}
+              </v-tab>
+            </v-tabs>
+            <v-tabs-items v-model="tab">
+              <v-tab-item
+                v-for="chartData in renderData"
+                :key="chartData.id"
+                :value="chartData.label"
+              >
+                <v-card flat>
+                  <v-row v-if="arrPositive.length">
+                    <v-col cols="12">
+                      <h2>{{ chartData.label }}</h2>
+                      <LineChart
+                        :chartData="chartData.data"
+                        :options="chartOptions"
+                        :label="chartData.label"
+                        :chartColorOptions="chartData.chartColorOptions"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-tab-item>
+            </v-tabs-items>
+          </v-container>
+        </v-card>
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -59,7 +56,7 @@ export default {
 		arrOnVentilators: [],
 		arrRecovered: [],
 		arrDeaths: [],
-		chartOptions: {  // 新增這裡
+		chartOptions: {
 			responsive: true,
 			maintainAspectRatio: false,
 		},
@@ -87,7 +84,7 @@ export default {
 			labels,
 		} = this
 		
-		// 將所有要輸出的陣列整理為一個，做為最終迭代的對象
+		//將所有要輸出的陣列整理為一個，做為最終迭代的對象
 		const displayedDataArr = [
 			arrPositive,
 			arrHoptialized,
@@ -97,7 +94,7 @@ export default {
 			arrDeaths,
 		]
 		
-		// 設置每個圖表的背景與邊界顏色
+		//設置每個圖表的背景與邊界顏色
 		const chartColorOptions = [
 			{
 				borderColor: '#EF5350',
@@ -125,7 +122,7 @@ export default {
 			},
 		]
 		
-		// 最終整理成一個陣列，每一個元素都包含標籤名稱、資料以及圖表顏色的設定
+		//最終整理成一個陣列，每一個元素都包含標籤名稱、資料以及圖表顏色的設定
 		return displayedDataArr.map((data, index) => ({
 			label: labels[index],
 			data,
@@ -134,20 +131,20 @@ export default {
 	}
   },
   async created() {
-	// 利用解構的方式取出axios拿到的data
+	//利用解構的方式取出axios拿到的data
     let { data } = await axios.get(
       'https://api.covidtracking.com/v1/us/daily.json'
     )
 	
-	// 只取最近一個月的資料
+	//只取最近一個月的資料
     data = data.slice(0, 30)
 	
-	// 迭代陣列中的每個元素
+	//迭代陣列中的每個元素
     data.forEach((item) => {
-      // 利用dayjs將原本的20201010改為2020/10/10
+      //利用dayjs將原本的20201010改為2020/10/10
       const date = dayjs(`${item.date}`).format('YYYY/MM/DD')
       
-      // 利用解構的方式取出data內我們需要的值
+      //利用解構的方式取出data內我們需要的值
       const {
         positive,
         hospitalizedCurrently,
@@ -157,7 +154,7 @@ export default {
         death,
       } = item 
       
-      // 將值推進對應的陣列，每一個值都需要對應一個日期，所以要以物件的方式傳入
+      //將值推進對應的陣列，每一個值都需要對應一個日期，所以要以物件的方式傳入
       this.arrPositive.push({ date, total: positive })
       this.arrHoptialized.push({ date, total: hospitalizedCurrently })
       this.arrDeaths.push({ date, total: death })
